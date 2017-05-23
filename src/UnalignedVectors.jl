@@ -4,6 +4,13 @@ module UnalignedVectors
 
 export UnalignedVector, MaybeUnalignedVector, unaligned_reinterpret
 
+"""
+    v = UnalignedVector{T}(a::Vector{UInt8})
+
+Create a vector with element type `T` from a memory buffer of bytes
+(`UInt8`). In contrast with `reinterpret`, this allows array creation
+even if `a` does not have proper pointer alignment for `T`.
+"""
 struct UnalignedVector{T} <: AbstractArray{T,1}
     a::Vector{UInt8}
     len::Int
@@ -30,6 +37,12 @@ end
     unsafe_store!(Ptr{T}(pointer(a.a)), val, i)
 end
 
+"""
+    v = unaligned_reinterpret(T, a::Vector{UInt8})
+
+Reinterprets `a` as an `UnalignedVector{T}`, unless `T == UInt8` in
+which case `a` is returned.
+"""
 unaligned_reinterpret(::Type{T}, a::Vector{UInt8}) where {T} = UnalignedVector{T}(a)
 unaligned_reinterpret(::Type{UInt8}, a::Vector{UInt8}) = a
 

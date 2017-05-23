@@ -39,4 +39,38 @@ ENDIAN_BOM == 0x04030201 || error("tests implemented only for little endian mach
     @test isa(reinterpret(UInt8, r, (20,)), Vector{UInt8})
 end
 
+@testset "Mmap" begin
+    fn = tempname()
+    A = [1.0 2.0;
+         3.0 4.0]
+    open(fn, "w") do io
+        write(io, "BIGARRAY\n")
+        write(io, ndims(A))
+        for s in size(A)
+            write(io, s)
+        end
+        write(io, A)
+    end
+    function reader(io)
+        String(read(io, 9)) == "BIGARRAY\n" || error("file is not a BIGARRAY file")
+        n = read(io, Int)
+        sz = (read(io, Int, n)...)
+        a = Mmap.mmap(io, Vector{UInt8}, sizeof(Float64)*prod(sz), position(io))
+        v = UnalignedVector{Float64}(a)
+        reshape(v, sz)
+    end
+    B = open(fn) do io
+        reader(io)
+    end
+    @test B == A
+    # Clean up. Some platforms (e.g., Windows) may have a hard time
+    # with this, since the file was mmapped.
+    B = nothing
+    gc(true)
+    sleep(1.0)
+    try
+        rm(fn)
+    end
+end
+
 nothing
