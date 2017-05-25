@@ -57,20 +57,18 @@ end
         sz = (read(io, Int, n)...)
         a = Mmap.mmap(io, Vector{UInt8}, sizeof(Float64)*prod(sz), position(io))
         v = UnalignedVector{Float64}(a)
-        reshape(v, sz)
+        return reshape(v, sz), a
     end
-    B = open(fn) do io
+    B, mmapped = open(fn) do io
         reader(io)
     end
     @test B == A
     # Clean up. Some platforms (e.g., Windows) may have a hard time
     # with this, since the file was mmapped.
-    B = nothing
+    finalize(mmapped)
     gc(true)
     sleep(1.0)
-    try
-        rm(fn)
-    end
+    rm(fn)
 end
 
 nothing
