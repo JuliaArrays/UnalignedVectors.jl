@@ -26,7 +26,7 @@ MaybeUnalignedVector{T} = Union{UnalignedVector{T},Vector{T}}
 
 Base.IndexStyle(::Type{UnalignedVector{T}}) where {T} = IndexLinear()
 @inline Base.length(a::UnalignedVector) = a.len
-@inline Base.size(a) = (length(a),)
+@inline Base.size(a::UnalignedVector) = (length(a),)
 
 @inline function Base.getindex(a::UnalignedVector{T}, i) where {T}
     @boundscheck checkbounds(a, i)
