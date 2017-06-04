@@ -28,7 +28,7 @@ Base.IndexStyle(::Type{UnalignedVector{T}}) where {T} = IndexLinear()
 @inline Base.length(a::UnalignedVector) = a.len
 @inline Base.size(a::UnalignedVector) = (length(a),)
 
-@inline function Base.getindex(a::UnalignedVector{T}, i) where {T}
+@inline function Base.getindex(a::UnalignedVector{T}, i::Int) where {T}
     @boundscheck checkbounds(a, i)
     unsafe_load(Ptr{T}(pointer(a.a)), i)
 end
