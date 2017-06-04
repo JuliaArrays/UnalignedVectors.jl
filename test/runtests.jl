@@ -22,6 +22,7 @@ ENDIAN_BOM == 0x04030201 || error("tests implemented only for little endian mach
     for i = 1:10
         v[i] = i
     end
+    @test v[1:10] == [v[i] for i in 1:10] == [i for i in 1:10]
     @test v == collect(0x0001:0x000a)
     @test a == vec(vcat((0x01:0x0a)', zeros(UInt8,1,10)))
     @test_throws InexactError v[1] = 0xffffffff
