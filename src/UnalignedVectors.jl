@@ -15,7 +15,7 @@ struct UnalignedVector{T} <: AbstractArray{T,1}
     a::Vector{UInt8}
     len::Int
 
-    function (::Type{UnalignedVector{T}})(a::Vector{UInt8}) where {T}
+    function UnalignedVector{T}(a::Vector{UInt8}) where {T}
         len = length(a) ÷ sizeof(T)
         len*sizeof(T) == length(a) || throw(DimensionMismatch("length(a) should be a multiple of $(sizeof(T)), got $(length(a))"))
         new{T}(a, len)
