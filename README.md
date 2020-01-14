@@ -1,5 +1,7 @@
 # UnalignedVectors
 
+**NOTE**: This package is deprecated. On Julia 0.7 or higher, use `reinterpret` directly.
+
 [![Build Status](https://travis-ci.org/JuliaArrays/UnalignedVectors.jl.svg?branch=master)](https://travis-ci.org/JuliaArrays/UnalignedVectors.jl)
 [![Build status](https://ci.appveyor.com/api/projects/status/e5s72r50g0xix7o6/branch/master?svg=true)](https://ci.appveyor.com/project/timholy/unalignedvectors-jl/branch/master)
 [![codecov.io](http://codecov.io/github/JuliaArrays/UnalignedVectors.jl/coverage.svg?branch=master)](http://codecov.io/github/JuliaArrays/UnalignedVectors.jl?branch=master)
